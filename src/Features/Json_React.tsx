@@ -9,12 +9,9 @@ function Json_React() {
       const response = await GetRequest(
         "https://jsonplaceholder.typicode.com/todos"
       );
-
       let userData = [...response];
-
       setData(userData);
     };
-
     fetchData();
   }, []);
 
