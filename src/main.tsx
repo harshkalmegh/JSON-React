@@ -1,11 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
+import React from "react";
+import ReactDOM from "react-dom";
+import Json_React from "./Features/Json_React";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Json_React />
   </React.StrictMode>,
-  document.getElementById('root')
-)
+  document.getElementById("root")
+);
