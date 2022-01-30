@@ -5,6 +5,6 @@ export const GetRequest = async (url: string) => {
         const response = apiResponse.status === 200 ? apiResponse.data : {}
         return response;
     } catch (err) {
-        return;
+        return "Request Failed try again";
     }
 }

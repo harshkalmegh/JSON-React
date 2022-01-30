@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GetRequest } from "../Utilities/Network";
 
 function Json_React() {
@@ -11,21 +11,49 @@ function Json_React() {
    */
   const [data, setData] = useState<any>([]);
   const [pagination, setPagination] = useState<any>(0);
+  const [end, setEnd] = useState<any>(10);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await GetRequest(
         "https://jsonplaceholder.typicode.com/todos"
       );
-      let userData = [...response.splice(pagination, 10)];
+      let userData = [...response];
       setData(userData);
     };
     fetchData();
-  }, [pagination]);
+  }, []);
+
+  // Version 1
+  const _handle = (e: any) => {
+    const { value } = e.target;
+    const _value = parseInt(value);
+    console.log("_value", _value);
+    setPagination(_value);
+    setEnd(_value + 10);
+  };
+
+  // const _handle_previous = (e: any) => {
+  //   const { value } = e.target;
+  //   const _value = parseInt(value);
+  //   if (pagination > 0) {
+  //     setPagination(pagination - _value);
+  //     setEnd(end - _value);
+  //   }
+  // };
+
+  // const _handle_next = (e: any) => {
+  //   const { value } = e.target;
+  //   const _value = parseInt(value);
+  //   if (pagination < 190) {
+  //     setPagination(pagination + _value);
+  //     setEnd(end + _value);
+  //   }
+  // };
 
   return (
     <div>
-      {data.map((val: any) => {
+      {data.slice(pagination, end).map((val: any) => {
         return (
           <div key={val.id} style={{ fontSize: "larger", margin: "8px" }}>
             <span>{val.id}. </span>
@@ -33,144 +61,70 @@ function Json_React() {
           </div>
         );
       })}
-      <button
-        onClick={() => {
-          setPagination(0);
-        }}
-      >
+      {/* <button value="10" onClick={_handle_previous}>
+        Previous
+      </button>
+      <button value="10" onClick={_handle_next}>
+        Next
+      </button> */}
+      <button value="0" onClick={_handle}>
         1
       </button>
-      <button
-        onClick={() => {
-          setPagination(10);
-        }}
-      >
+      <button value="10" onClick={_handle}>
         2
       </button>
-      <button
-        onClick={() => {
-          setPagination(20);
-        }}
-      >
+      <button value="20" onClick={_handle}>
         3
       </button>
-      <button
-        onClick={() => {
-          setPagination(30);
-        }}
-      >
+      <button value="30" onClick={_handle}>
         4
       </button>
-      <button
-        onClick={() => {
-          setPagination(40);
-        }}
-      >
+      <button value="40" onClick={_handle}>
         5
       </button>
-      <button
-        onClick={() => {
-          setPagination(50);
-        }}
-      >
+      <button value="50" onClick={_handle}>
         6
       </button>
-      <button
-        onClick={() => {
-          setPagination(60);
-        }}
-      >
+      <button value="60" onClick={_handle}>
         7
       </button>
-      <button
-        onClick={() => {
-          setPagination(70);
-        }}
-      >
+      <button value="70" onClick={_handle}>
         8
       </button>
-      <button
-        onClick={() => {
-          setPagination(80);
-        }}
-      >
+      <button value="80" onClick={_handle}>
         9
       </button>
-      <button
-        onClick={() => {
-          setPagination(90);
-        }}
-      >
+      <button value="90" onClick={_handle}>
         10
       </button>
-      <button
-        onClick={() => {
-          setPagination(100);
-        }}
-      >
+      <button value="100" onClick={_handle}>
         11
       </button>
-      <button
-        onClick={() => {
-          setPagination(110);
-        }}
-      >
+      <button value="110" onClick={_handle}>
         12
       </button>
-      <button
-        onClick={() => {
-          setPagination(120);
-        }}
-      >
+      <button value="120" onClick={_handle}>
         13
       </button>
-      <button
-        onClick={() => {
-          setPagination(130);
-        }}
-      >
+      <button value="130" onClick={_handle}>
         14
       </button>
-      <button
-        onClick={() => {
-          setPagination(140);
-        }}
-      >
+      <button value="140" onClick={_handle}>
         15
       </button>
-      <button
-        onClick={() => {
-          setPagination(150);
-        }}
-      >
+      <button value="150" onClick={_handle}>
         16
       </button>
-      <button
-        onClick={() => {
-          setPagination(160);
-        }}
-      >
+      <button value="160" onClick={_handle}>
         17
       </button>
-      <button
-        onClick={() => {
-          setPagination(170);
-        }}
-      >
+      <button value="170" onClick={_handle}>
         18
       </button>
-      <button
-        onClick={() => {
-          setPagination(180);
-        }}
-      >
+      <button value="180" onClick={_handle}>
         19
       </button>
-      <button
-        onClick={() => {
-          setPagination(190);
-        }}
-      >
+      <button value="190" onClick={_handle}>
         20
       </button>
     </div>
