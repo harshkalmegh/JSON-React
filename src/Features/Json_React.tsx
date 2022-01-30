@@ -28,7 +28,6 @@ function Json_React() {
   const _handle = (e: any) => {
     const { value } = e.target;
     const _value = parseInt(value);
-    console.log("_value", _value);
     setPagination(_value);
     setEnd(_value + 10);
   };
