@@ -54,7 +54,6 @@ function Json_React() {
   const emptyArr: any = [];
   for (let i = 1; i <= data.length / page; i++) {
     emptyArr.push(i);
-    console.log(emptyArr);
   }
 
   return (
@@ -71,13 +70,11 @@ function Json_React() {
         Previous
       </button>
       {emptyArr.map((key: any) => {
-        for (let i = 0; i < data.length / page; i++) {
-          return (
-            <button key={key} value={key} onClick={_handle}>
-              {key}
-            </button>
-          );
-        }
+        return (
+          <button key={key} value={key} onClick={_handle}>
+            {key}
+          </button>
+        );
       })}
       <button value="1" onClick={_handle_next}>
         Next
