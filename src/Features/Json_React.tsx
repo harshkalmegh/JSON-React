@@ -34,24 +34,24 @@ function Json_React() {
   const first = last - page;
   const current = data.slice(first, last);
 
-  // const _handle_previous = (e: any) => {
-  //   const { value } = e.target;
-  //   const _value = parseInt(value);
-  //   if (currentPage > 1) {
-  //     setCurrentPage(currentPage - _value);
-  //   }
-  // };
+  const _handle_previous = (e: any) => {
+    const { value } = e.target;
+    const _value = parseInt(value);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - _value);
+    }
+  };
 
-  // const _handle_next = (e: any) => {
-  //   const { value } = e.target;
-  //   const _value = parseInt(value);
-  //   if (currentPage < data.length / 10) {
-  //     setCurrentPage(currentPage + _value);
-  //   }
-  // };
+  const _handle_next = (e: any) => {
+    const { value } = e.target;
+    const _value = parseInt(value);
+    if (currentPage < data.length / 10) {
+      setCurrentPage(currentPage + _value);
+    }
+  };
 
   const emptyArr: any = [];
-  for (let i = 1; i <= data.length / 10; i++) {
+  for (let i = 1; i <= data.length / page; i++) {
     emptyArr.push(i);
   }
 
@@ -65,9 +65,11 @@ function Json_React() {
           </div>
         );
       })}
-
+      <button value="1" onClick={_handle_previous}>
+        Previous
+      </button>
       {emptyArr.map((key: any) => {
-        for (let i = 0; i < data.length / 10; i++) {
+        for (let i = 0; i < data.length / page; i++) {
           return (
             <button key={key} value={key} onClick={_handle}>
               {key}
@@ -75,13 +77,9 @@ function Json_React() {
           );
         }
       })}
-
-      {/* <button value="1" onClick={_handle_previous}>
-        Previous
-      </button>
       <button value="1" onClick={_handle_next}>
         Next
-      </button> */}
+      </button>
     </div>
   );
 }
