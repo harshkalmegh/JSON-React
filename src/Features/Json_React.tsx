@@ -54,6 +54,7 @@ function Json_React() {
   const emptyArr: any = [];
   for (let i = 1; i <= data.length / page; i++) {
     emptyArr.push(i);
+    console.log(emptyArr);
   }
 
   return (
