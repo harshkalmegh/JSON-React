@@ -30,6 +30,7 @@ function Json_React() {
     const _value = parseInt(value);
     setCurrentPage(_value);
   };
+
   const last = currentPage * page;
   const first = last - page;
   const current = data.slice(first, last);
