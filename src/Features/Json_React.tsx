@@ -9,9 +9,11 @@ function Json_React() {
    * 3. pass function in useEffect
    * 4. display the data using map
    */
+  const [input, setInput] = useState<any>("");
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState<any>(1);
   const [page] = useState<any>(10);
+  const [newdata, setNewData] = useState<any>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,16 +58,40 @@ function Json_React() {
     emptyArr.push(i);
   }
 
+  const output = data.map((val: any) => val.title);
+  const result = output.filter(
+    (el: any) => el.toLowerCase().indexOf(input.toLowerCase()) !== -1
+  );
+
   return (
     <div>
-      {current.map((val: any) => {
-        return (
-          <div key={val.id} style={{ fontSize: "larger", margin: "8px" }}>
-            <span>{val.id}. </span>
-            <span>Title : {val.title} </span>
-          </div>
-        );
-      })}
+      <div>
+        <span>Search : </span>
+        <input
+          type="text"
+          placeholder="Enter Title Here"
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
+        />
+      </div>
+      {input
+        ? result.map((val: any, key: any) => {
+            return (
+              <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
+                <span>{key}. </span>
+                <span>Title : {val} </span>
+              </div>
+            );
+          })
+        : current.map((val: any) => {
+            return (
+              <div key={val.id} style={{ fontSize: "larger", margin: "8px" }}>
+                <span>{val.id}. </span>
+                <span>Title : {val.title} </span>
+              </div>
+            );
+          })}
       <button value="1" onClick={_handle_previous}>
         Previous
       </button>
