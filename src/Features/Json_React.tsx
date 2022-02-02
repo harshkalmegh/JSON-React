@@ -13,7 +13,6 @@ function Json_React() {
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState<any>(1);
   const [page] = useState<any>(10);
-  const [newdata, setNewData] = useState<any>([]);
 
   useEffect(() => {
     const fetchData = async () => {
