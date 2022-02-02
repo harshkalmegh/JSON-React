@@ -87,7 +87,6 @@ function Json_React() {
         ? current1.map((val: any, key: any) => {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
-                <span>{key}. </span>
                 <span>Title : {val} </span>
               </div>
             );
@@ -100,7 +99,7 @@ function Json_React() {
               </div>
             );
           })}
-      {input ? (
+      {!input ? (
         <button value="1" onClick={_handle_previous}>
           Previous
         </button>
