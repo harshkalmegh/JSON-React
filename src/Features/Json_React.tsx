@@ -47,20 +47,29 @@ function Json_React() {
   const _handle_next = (e: any) => {
     const { value } = e.target;
     const _value = parseInt(value);
-    if (currentPage < data.length / 10) {
+    if (currentPage < Math.ceil(data.length / page)) {
       setCurrentPage(currentPage + _value);
     }
   };
 
   const emptyArr: any = [];
-  for (let i = 1; i <= data.length / page; i++) {
+  for (let i = 1; i <= Math.ceil(data.length / page); i++) {
     emptyArr.push(i);
   }
 
   const output = data.map((val: any) => val.title);
   const result = output.filter(
-    (el: any) => el.toLowerCase().indexOf(input.toLowerCase()) !== -1
+    (el: any) => el.indexOf(input.toLowerCase()) !== -1
   );
+
+  const last1 = currentPage * page;
+  const first1 = last1 - page;
+  const current1 = result.slice(first1, last1);
+
+  const newArr: any = [];
+  for (let i = 1; i <= Math.ceil(result.length / page); i++) {
+    newArr.push(i);
+  }
 
   return (
     <div>
@@ -75,7 +84,7 @@ function Json_React() {
         />
       </div>
       {input
-        ? result.map((val: any, key: any) => {
+        ? current1.map((val: any, key: any) => {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
                 <span>{key}. </span>
@@ -91,19 +100,32 @@ function Json_React() {
               </div>
             );
           })}
-      <button value="1" onClick={_handle_previous}>
-        Previous
-      </button>
-      {emptyArr.map((key: any) => {
-        return (
-          <button key={key} value={key} onClick={_handle}>
-            {key}
-          </button>
-        );
-      })}
-      <button value="1" onClick={_handle_next}>
-        Next
-      </button>
+      {input ? (
+        <button value="1" onClick={_handle_previous}>
+          Previous
+        </button>
+      ) : null}
+
+      {!input
+        ? emptyArr.map((key: any) => {
+            return (
+              <button key={key} value={key} onClick={_handle}>
+                {key}
+              </button>
+            );
+          })
+        : newArr.map((key: any) => {
+            return (
+              <button key={key} value={key} onClick={_handle}>
+                {key}
+              </button>
+            );
+          })}
+      {!input ? (
+        <button value="1" onClick={_handle_next}>
+          Next
+        </button>
+      ) : null}
     </div>
   );
 }
