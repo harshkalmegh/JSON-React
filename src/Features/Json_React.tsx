@@ -11,8 +11,8 @@ function Json_React() {
    */
   const [input, setInput] = useState<any>("");
   const [data, setData] = useState<any>([]);
-  const [currentPage, setCurrentPage] = useState<any>(1);
-  const [page] = useState<any>(10);
+  const [result, setResult] = useState<any>([]);
+  const [key, setKey] = useState<any>(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,52 +25,18 @@ function Json_React() {
     fetchData();
   }, []);
 
-  // Version 1
-  const _handle = (e: any) => {
-    const { value } = e.target;
-    const _value = parseInt(value);
-    setCurrentPage(_value);
-  };
+  useEffect(() => {
+    const output = data.map((val: any) => val.title);
+    const newOutput = output.filter(
+      (el: any) => el.indexOf(input.toLowerCase()) !== -1
+    );
+    console.log(newOutput);
 
-  const last = currentPage * page;
-  const first = last - page;
-  const current = data.slice(first, last);
+    setResult([...newOutput]);
+    console.log(result);
+  }, [input]);
 
-  const _handle_previous = (e: any) => {
-    const { value } = e.target;
-    const _value = parseInt(value);
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - _value);
-    }
-  };
-
-  const _handle_next = (e: any) => {
-    const { value } = e.target;
-    const _value = parseInt(value);
-    if (currentPage < Math.ceil(data.length / page)) {
-      setCurrentPage(currentPage + _value);
-    }
-  };
-
-  const emptyArr: any = [];
-  for (let i = 1; i <= Math.ceil(data.length / page); i++) {
-    emptyArr.push(i);
-  }
-
-  const output = data.map((val: any) => val.title);
-  const result = output.filter(
-    (el: any) => el.indexOf(input.toLowerCase()) !== -1
-  );
-
-  const last1 = currentPage * page;
-  const first1 = last1 - page;
-  const current1 = result.slice(first1, last1);
-
-  const newArr: any = [];
-  for (let i = 1; i <= Math.ceil(result.length / page); i++) {
-    newArr.push(i);
-  }
-
+  // console.log("@@RENDER");
   return (
     <div>
       <div>
@@ -78,53 +44,71 @@ function Json_React() {
         <input
           type="text"
           placeholder="Enter Title Here"
+          value={input}
           onChange={(e) => {
             setInput(e.target.value);
           }}
         />
+        <button
+          onClick={() => {
+            const _data = [...data];
+            _data[key].title = input;
+            setData(_data);
+          }}
+        >
+          Submit
+        </button>
       </div>
-      {input
-        ? current1.map((val: any, key: any) => {
-            return (
-              <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
-                <span>Title : {val} </span>
-              </div>
-            );
-          })
-        : current.map((val: any) => {
-            return (
-              <div key={val.id} style={{ fontSize: "larger", margin: "8px" }}>
-                <span>{val.id}. </span>
-                <span>Title : {val.title} </span>
-              </div>
-            );
-          })}
-      {!input ? (
-        <button value="1" onClick={_handle_previous}>
-          Previous
-        </button>
-      ) : null}
-
-      {!input
-        ? emptyArr.map((key: any) => {
-            return (
-              <button key={key} value={key} onClick={_handle}>
-                {key}
+      {
+        // input
+        // ? result.map((val: any, key: any) => {
+        //     return (
+        //       <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
+        //         <span>Title : {val.title} </span>
+        //         <button
+        //           onClick={() => {
+        //             setInput(val.title);
+        //             setKey(key);
+        //           }}
+        //         >
+        //           Edit
+        //         </button>
+        //         <button
+        //           onClick={() => {
+        //             data.splice(key, 1);
+        //             setData([...data]);
+        //           }}
+        //         >
+        //           Delete
+        //         </button>
+        //       </div>
+        //     );
+        //   })
+        // :
+        data.map((val: any, key: any) => {
+          return (
+            <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
+              <span>Title : {val.title} </span>
+              <button
+                onClick={() => {
+                  setInput(val.title);
+                  setKey(key);
+                }}
+              >
+                Edit
               </button>
-            );
-          })
-        : newArr.map((key: any) => {
-            return (
-              <button key={key} value={key} onClick={_handle}>
-                {key}
+              <button
+                onClick={() => {
+                  data.splice(key, 1);
+                  setData([...data]);
+                }}
+              >
+                Delete
               </button>
-            );
-          })}
-      {!input ? (
-        <button value="1" onClick={_handle_next}>
-          Next
-        </button>
-      ) : null}
+            </div>
+          );
+        })
+      }
     </div>
   );
 }
