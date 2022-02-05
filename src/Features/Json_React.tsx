@@ -11,8 +11,9 @@ function Json_React() {
    * 4. display the data using map
    */
   const [input, setInput] = useState<any>("");
-  const [data, setData] = useState<any>([]);
+  // const [data, setData] = useState<any>([]);
   const [result, setResult] = useState<any>([]);
+  const [page, setPage] = useState<any>(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,7 @@ function Json_React() {
           "https://jsonplaceholder.typicode.com/todos"
         );
         let userData = [...response];
-        setData(userData);
+        // setData(userData);
         localStorage.setItem("data", JSON.stringify(userData));
       }
     };
@@ -40,6 +41,13 @@ function Json_React() {
     );
     setResult([...newOutput]);
   }, [input]);
+
+  const _handle = (e: any) => {
+    const { value } = e.target;
+    const _value = parseInt(value);
+    console.log("_value", _value);
+    setPage(_value);
+  };
 
   let newdata: any = localStorage.getItem("data");
   const parsedData = JSON.parse(newdata);
@@ -86,7 +94,7 @@ function Json_React() {
               </div>
             );
           })
-        : parsedData.slice(0, 10).map((val: any, key: any) => {
+        : parsedData.slice(page - 10, page).map((val: any, key: any) => {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
                 <span>Title : {val.title} </span>
@@ -105,6 +113,83 @@ function Json_React() {
               </div>
             );
           })}
+      {/* {parsedData.slice(0, 20).map((val: any, key: any) => {
+        console.log(page, key);
+
+        return <button value={page * key}>{page * key}</button>;
+      })} */}
+
+      <button value="10" onClick={_handle}>
+        1
+      </button>
+      <button value="20" onClick={_handle}>
+        2
+      </button>
+      <button value="30" onClick={_handle}>
+        3
+      </button>
+      <button value="40" onClick={_handle}>
+        4
+      </button>
+      <button value="50" onClick={_handle}>
+        6
+      </button>
+
+      <button value="60" onClick={_handle}>
+        7
+      </button>
+
+      <button value="70" onClick={_handle}>
+        8
+      </button>
+
+      <button value="80" onClick={_handle}>
+        9
+      </button>
+
+      <button value="90" onClick={_handle}>
+        10
+      </button>
+
+      <button value="100" onClick={_handle}>
+        11
+      </button>
+
+      <button value="110" onClick={_handle}>
+        12
+      </button>
+
+      <button value="120" onClick={_handle}>
+        13
+      </button>
+
+      <button value="130" onClick={_handle}>
+        14
+      </button>
+
+      <button value="140" onClick={_handle}>
+        15
+      </button>
+
+      <button value="150" onClick={_handle}>
+        16
+      </button>
+
+      <button value="160" onClick={_handle}>
+        17
+      </button>
+
+      <button value="170" onClick={_handle}>
+        18
+      </button>
+
+      <button value="180" onClick={_handle}>
+        19
+      </button>
+
+      <button value="190" onClick={_handle}>
+        20
+      </button>
     </div>
   );
 }
