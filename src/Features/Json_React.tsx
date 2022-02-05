@@ -70,7 +70,7 @@ function Json_React() {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
                 <span>Title : {val} </span>
-                {console.log(key)}
+                {/* {console.log(key)} */}
 
                 <Link to={`/${key}`}>
                   <button>Edit</button>

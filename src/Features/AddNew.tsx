@@ -7,7 +7,7 @@ function Addnew() {
   const _handleAddNew = () => {
     const data: any = localStorage.getItem("data");
     const parsedData = JSON.parse(data);
-    console.log(parsedData);
+    // console.log(parsedData);
     parsedData.unshift({ title: value });
     localStorage.setItem("data", JSON.stringify(parsedData));
     navigate("/");
