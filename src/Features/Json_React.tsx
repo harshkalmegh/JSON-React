@@ -97,6 +97,7 @@ function Json_React() {
                   onClick={() => {
                     parsedData.splice(key, 1);
                     localStorage.setItem("data", JSON.stringify(parsedData));
+                    navigate("/");
                   }}
                 >
                   Delete
