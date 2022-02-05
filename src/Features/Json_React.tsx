@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GetRequest } from "../Utilities/Network";
 
 function Json_React() {
@@ -13,15 +13,20 @@ function Json_React() {
   const [input, setInput] = useState<any>("");
   const [data, setData] = useState<any>([]);
   const [result, setResult] = useState<any>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await GetRequest(
-        "https://jsonplaceholder.typicode.com/todos"
-      );
-      let userData = [...response];
-      localStorage.setItem("data", JSON.stringify(userData));
-      setData(userData);
+      const newData: any = localStorage.getItem("data");
+      const parsedNewData = JSON.parse(newData);
+      if (!parsedNewData || parsedNewData.length === 0) {
+        const response = await GetRequest(
+          "https://jsonplaceholder.typicode.com/todos"
+        );
+        let userData = [...response];
+        setData(userData);
+        localStorage.setItem("data", JSON.stringify(userData));
+      }
     };
     fetchData();
   }, []);
@@ -50,6 +55,14 @@ function Json_React() {
             setInput(e.target.value);
           }}
         />
+        <br />
+        <button
+          onClick={() => {
+            navigate("/Addnew");
+          }}
+        >
+          Add New
+        </button>
       </div>
       {input
         ? result.map((val: any, key: any) => {
@@ -57,17 +70,15 @@ function Json_React() {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
                 <span>Title : {val} </span>
+                {console.log(key)}
+
+                <Link to={`/${key}`}>
+                  <button>Edit</button>
+                </Link>
                 <button
                   onClick={() => {
-                    setInput(val);
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => {
-                    data.splice(key, 1);
-                    setData([...data]);
+                    result.splice(key, 1);
+                    setResult([...result]);
                   }}
                 >
                   Delete
@@ -75,7 +86,7 @@ function Json_React() {
               </div>
             );
           })
-        : parsedData.map((val: any, key: any) => {
+        : parsedData.slice(0, 10).map((val: any, key: any) => {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
                 <span>Title : {val.title} </span>
@@ -85,11 +96,7 @@ function Json_React() {
                 <button
                   onClick={() => {
                     parsedData.splice(key, 1);
-                    const _data = [...parsedData];
-                    localStorage.setItem("data", JSON.stringify(_data));
-                    // console.log(parsedData);
-
-                    // setData([...data]);
+                    localStorage.setItem("data", JSON.stringify(parsedData));
                   }}
                 >
                   Delete
