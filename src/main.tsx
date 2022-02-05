@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Json_React from "./Features/Json_React";
-import "./index.css";
+import Routing from "./Router/Router";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Json_React />
+    <Routing />
   </React.StrictMode>,
   document.getElementById("root")
 );

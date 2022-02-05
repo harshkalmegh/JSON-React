@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { GetRequest } from "../Utilities/Network";
 
 function Json_React() {
@@ -12,7 +13,6 @@ function Json_React() {
   const [input, setInput] = useState<any>("");
   const [data, setData] = useState<any>([]);
   const [result, setResult] = useState<any>([]);
-  const [key, setKey] = useState<any>(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,23 +20,25 @@ function Json_React() {
         "https://jsonplaceholder.typicode.com/todos"
       );
       let userData = [...response];
+      localStorage.setItem("data", JSON.stringify(userData));
       setData(userData);
     };
     fetchData();
   }, []);
 
   useEffect(() => {
-    const output = data.map((val: any) => val.title);
+    const data: any = localStorage.getItem("data");
+    const parsedData = JSON.parse(data);
+    const output = parsedData.map((val: any) => val.title);
     const newOutput = output.filter(
       (el: any) => el.indexOf(input.toLowerCase()) !== -1
     );
-    console.log(newOutput);
-
     setResult([...newOutput]);
-    console.log(result);
   }, [input]);
 
-  // console.log("@@RENDER");
+  let newdata: any = localStorage.getItem("data");
+  const parsedData = JSON.parse(newdata);
+
   return (
     <div>
       <div>
@@ -44,71 +46,57 @@ function Json_React() {
         <input
           type="text"
           placeholder="Enter Title Here"
-          value={input}
           onChange={(e) => {
             setInput(e.target.value);
           }}
         />
-        <button
-          onClick={() => {
-            const _data = [...data];
-            _data[key].title = input;
-            setData(_data);
-          }}
-        >
-          Submit
-        </button>
       </div>
-      {
-        // input
-        // ? result.map((val: any, key: any) => {
-        //     return (
-        //       <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
-        //         <span>Title : {val.title} </span>
-        //         <button
-        //           onClick={() => {
-        //             setInput(val.title);
-        //             setKey(key);
-        //           }}
-        //         >
-        //           Edit
-        //         </button>
-        //         <button
-        //           onClick={() => {
-        //             data.splice(key, 1);
-        //             setData([...data]);
-        //           }}
-        //         >
-        //           Delete
-        //         </button>
-        //       </div>
-        //     );
-        //   })
-        // :
-        data.map((val: any, key: any) => {
-          return (
-            <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
-              <span>Title : {val.title} </span>
-              <button
-                onClick={() => {
-                  setInput(val.title);
-                  setKey(key);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => {
-                  data.splice(key, 1);
-                  setData([...data]);
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          );
-        })
-      }
+      {input
+        ? result.map((val: any, key: any) => {
+            // console.log(val);
+            return (
+              <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
+                <span>Title : {val} </span>
+                <button
+                  onClick={() => {
+                    setInput(val);
+                  }}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => {
+                    data.splice(key, 1);
+                    setData([...data]);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            );
+          })
+        : parsedData.map((val: any, key: any) => {
+            return (
+              <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
+                <span>Title : {val.title} </span>
+                <Link to={`/${key}`}>
+                  <button>Edit</button>
+                </Link>
+                <button
+                  onClick={() => {
+                    parsedData.splice(key, 1);
+                    const _data = [...parsedData];
+                    localStorage.setItem("data", JSON.stringify(_data));
+                    // console.log(parsedData);
+
+                    // setData([...data]);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            );
+          })}
     </div>
   );
 }
