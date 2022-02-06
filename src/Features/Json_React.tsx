@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GetRequest } from "../Utilities/Network";
+import { getAuth, signOut } from "firebase/auth";
 
 function Json_React() {
   /**
@@ -52,8 +53,25 @@ function Json_React() {
   let newdata: any = localStorage.getItem("data");
   const parsedData = JSON.parse(newdata);
 
+  const emptyArr: any = [];
+  for (let i = 1; i <= Math.ceil(parsedData.length / page); i++) {
+    emptyArr.push(i);
+  }
+
+  const _handleSignOut = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
   return (
     <div>
+      <button onClick={_handleSignOut}>Sign Out</button>
       <div>
         <span>Search : </span>
         <input
@@ -94,7 +112,7 @@ function Json_React() {
               </div>
             );
           })
-        : parsedData.slice(page - 10, page).map((val: any, key: any) => {
+        : parsedData.map((val: any, key: any) => {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
                 <span>Title : {val.title} </span>
@@ -113,13 +131,15 @@ function Json_React() {
               </div>
             );
           })}
-      {/* {parsedData.slice(0, 20).map((val: any, key: any) => {
-        console.log(page, key);
-
-        return <button value={page * key}>{page * key}</button>;
+      {/* {emptyArr.map((key: any) => {
+        return (
+          <button key={key} value={key} onClick={_handle}>
+            {key}
+          </button>
+        );
       })} */}
 
-      <button value="10" onClick={_handle}>
+      {/* <button value="10" onClick={_handle}>
         1
       </button>
       <button value="20" onClick={_handle}>
@@ -189,7 +209,7 @@ function Json_React() {
 
       <button value="190" onClick={_handle}>
         20
-      </button>
+      </button> */}
     </div>
   );
 }
