@@ -11,6 +11,7 @@ function Json_React() {
    * 3. pass function in useEffect
    * 4. display the data using map
    */
+
   const [input, setInput] = useState<any>("");
   // const [data, setData] = useState<any>([]);
   const [result, setResult] = useState<any>([]);
@@ -62,10 +63,11 @@ function Json_React() {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        // Sign-out successful.
+        localStorage.removeItem("firebase");
+        navigate("/signin");
       })
       .catch((error) => {
-        // An error happened.
+        console.log(error);
       });
   };
 

@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import SignIn from "./Features/SignIn";
+import Routing from "./Router/Router";
 
 ReactDOM.render(
   <React.StrictMode>
-    <SignIn />
+    <Routing />
   </React.StrictMode>,
   document.getElementById("root")
 );
