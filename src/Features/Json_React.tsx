@@ -19,6 +19,14 @@ function Json_React() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const local: any = localStorage.getItem("firebase");
+    const ans = JSON.parse(local);
+
+    if (!ans) {
+      navigate("/signin");
+    }
+  });
+  useEffect(() => {
     const fetchData = async () => {
       const newData: any = localStorage.getItem("data");
       const parsedNewData = JSON.parse(newData);
@@ -54,10 +62,10 @@ function Json_React() {
   let newdata: any = localStorage.getItem("data");
   const parsedData = JSON.parse(newdata);
 
-  const emptyArr: any = [];
-  for (let i = 1; i <= Math.ceil(parsedData.length / page); i++) {
-    emptyArr.push(i);
-  }
+  // const emptyArr: any = [];
+  // for (let i = 1; i <= Math.ceil(parsedData.length / page); i++) {
+  //   emptyArr.push(i);
+  // }
 
   const _handleSignOut = () => {
     const auth = getAuth();

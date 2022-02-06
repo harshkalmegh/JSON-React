@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 function Addnew() {
   const [value, setValue] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const local: any = localStorage.getItem("firebase");
+    const ans = JSON.parse(local);
+    if (!ans) {
+      navigate("/signin");
+    }
+  });
+
   const _handleAddNew = () => {
     const data: any = localStorage.getItem("data");
     const parsedData = JSON.parse(data);
@@ -12,6 +21,7 @@ function Addnew() {
     localStorage.setItem("data", JSON.stringify(parsedData));
     navigate("/");
   };
+
   return (
     <div>
       <input

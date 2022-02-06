@@ -7,6 +7,15 @@ function Edit_data() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const local: any = localStorage.getItem("firebase");
+    const ans = JSON.parse(local);
+
+    if (!ans) {
+      navigate("/signin");
+    }
+  });
+
+  useEffect(() => {
     function setData() {
       const data: any = localStorage.getItem("data");
       const parsedData = JSON.parse(data);
