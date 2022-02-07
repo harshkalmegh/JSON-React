@@ -18,7 +18,9 @@ function SignIn() {
   const [phoneNumber, setPhoneNumber] = useState(countryCode);
   const [otp, setOtp] = useState("");
   const [check, setCheck] = useState(true);
-  const [recaptcha, setRecaptcha] = useState(true);
+  // const [recaptcha, setRecaptcha] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // useEffect(() => {
   //   const verifier = new firebase.auth.RecaptchaVerifier(element.current, {
@@ -174,6 +176,27 @@ function SignIn() {
           OTP Sign In
         </button>
       )}
+      <div>
+        <div>
+          <p>Enter Email</p>
+          <input
+            type="text"
+            value={email}
+            onChange={(e: any) => {
+              setEmail(e.target.value);
+            }}
+          />
+          <p>Enter Password</p>
+          <input
+            type="text"
+            value={email}
+            onChange={(e: any) => {
+              setPassword(e.target.value);
+            }}
+          />
+        </div>
+        <button>Submit</button>
+      </div>
     </div>
   );
 }
