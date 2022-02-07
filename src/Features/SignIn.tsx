@@ -7,7 +7,11 @@ import {
   TwitterAuthProvider,
   getAuth,
   signInWithPhoneNumber,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInAnonymously,
 } from "firebase/auth";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { authentication } from "../Firebase/Firebase";
@@ -18,21 +22,10 @@ function SignIn() {
   const [phoneNumber, setPhoneNumber] = useState(countryCode);
   const [otp, setOtp] = useState("");
   const [check, setCheck] = useState(true);
-  // const [recaptcha, setRecaptcha] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // useEffect(() => {
-  //   const verifier = new firebase.auth.RecaptchaVerifier(element.current, {
-  //     size: "invisible",
-  //   });
-  //   if (!recaptcha) {
-  //     verifier.verify().then(() => setRecaptcha(verifier));
-  //   }
-  //   return () => {
-  //     verifier.clear();
-  //   };
-  // });
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
 
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
@@ -75,10 +68,8 @@ function SignIn() {
         .catch((error) => {
           // Error; SMS not sent
           // ...
-          //   if (typeof appVerifier != "undefined") {
-          // appVerifier.reset();
+          //
           appVerifier.clear();
-          //   }
           console.log(error);
         });
     }
@@ -109,21 +100,6 @@ function SignIn() {
     }
   };
 
-  //   const signInWithtwitter = () => {
-  //     const provider = new TwitterAuthProvider();
-  //     const auth = getAuth();
-  //     signInWithPopup(auth, provider)
-  //       .then((result) => {
-  //         const credential: any =
-  //           TwitterAuthProvider.credentialFromResult(result);
-  //         console.log(result, credential);
-  //       })
-  //       .catch((error) => {
-  //         const credential = TwitterAuthProvider.credentialFromError(error);
-  //         console.log(credential, error);
-  //       });
-  //   };
-
   const _handleResetCaptcha = () => {
     setCheck(true);
     window.recaptchaVerifier.destroyed = true;
@@ -138,11 +114,92 @@ function SignIn() {
     //generateRecaptcha();
   };
 
+  const signUpWithEmailPassword = () => {
+    createUserWithEmailAndPassword(authentication, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        setEmail("");
+        setPassword("");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        setEmail("");
+        setPassword("");
+        // ..
+      });
+  };
+
+  const signInWithEmailPassword = () => {
+    signInWithEmailAndPassword(authentication, signInEmail, signInPassword)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        if (user) {
+          navigate("/");
+        }
+        localStorage.setItem("firebase", JSON.stringify(user));
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
+
+  const signinanonymously = () => {
+    signInAnonymously(authentication)
+      .then((user: any) => {
+        if (user) {
+          navigate("/");
+        }
+        localStorage.setItem("firebase", JSON.stringify(user));
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
+
+  const provider = new TwitterAuthProvider();
+
+  const signInWithtwitter = () => {
+    signInWithPopup(authentication, provider)
+      .then((result) => {
+        const credential: any =
+          TwitterAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const secret = credential.secret;
+        const user = result.user;
+        console.log(token, secret, user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.email;
+        const credential = TwitterAuthProvider.credentialFromError(error);
+        console.log(errorCode, errorMessage, email, credential);
+      });
+  };
+
   return (
     <div>
+      <h2>Sign In with Google</h2>
       <button onClick={signInWithGoogle}>Google Sign In</button>
-      {/* <button onClick={signInWithtwitter}>Twitter</button> */}
+      <hr />
+
       <div>
+        <h2>Sign In with Twitter</h2>
+        <button onClick={signInWithtwitter}>Twitter</button>
+      </div>
+
+      <hr />
+      <div>
+        <h2>Sign In with Phone Number</h2>
         <p>Enter Mobile Number</p>
         {check ? (
           <input
@@ -177,10 +234,12 @@ function SignIn() {
         </button>
       )}
       <div>
+        <hr />
         <div>
+          <h2>Sign Up with Email Id</h2>
           <p>Enter Email</p>
           <input
-            type="text"
+            type="email"
             value={email}
             onChange={(e: any) => {
               setEmail(e.target.value);
@@ -188,14 +247,42 @@ function SignIn() {
           />
           <p>Enter Password</p>
           <input
-            type="text"
-            value={email}
+            type="password"
+            value={password}
             onChange={(e: any) => {
               setPassword(e.target.value);
             }}
           />
         </div>
-        <button>Submit</button>
+        <button onClick={signUpWithEmailPassword}>Sign Up</button>
+      </div>
+      <hr />
+      <div>
+        <div>
+          <h2>Sign In with Email</h2>
+          <p>Enter Email</p>
+          <input
+            type="email"
+            value={signInEmail}
+            onChange={(e: any) => {
+              setSignInEmail(e.target.value);
+            }}
+          />
+          <p>Enter Password</p>
+          <input
+            type="password"
+            value={signInPassword}
+            onChange={(e: any) => {
+              setSignInPassword(e.target.value);
+            }}
+          />
+        </div>
+        <button onClick={signInWithEmailPassword}>Sign In</button>
+      </div>
+      <hr />
+      <div>
+        <h2>Sign In Anonymously</h2>
+        <button onClick={signinanonymously}>Sign In Anonymously</button>
       </div>
     </div>
   );
