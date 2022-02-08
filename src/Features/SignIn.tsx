@@ -35,7 +35,7 @@ function SignIn() {
         if (re) {
           navigate("/");
         }
-        localStorage.setItem("firebase", JSON.stringify(re.user.displayName));
+        document.cookie = "name=harsh";
       })
       .catch((err: any) => {
         console.log(err);
@@ -89,7 +89,7 @@ function SignIn() {
           if (user) {
             navigate("/");
           }
-          localStorage.setItem("firebase", JSON.stringify(user));
+          document.cookie = "name=harsh";
 
           // ...
         })
@@ -140,7 +140,7 @@ function SignIn() {
         if (user) {
           navigate("/");
         }
-        localStorage.setItem("firebase", JSON.stringify(user));
+        document.cookie = "name=harsh";
         // ...
       })
       .catch((error) => {
@@ -156,7 +156,7 @@ function SignIn() {
         if (user) {
           navigate("/");
         }
-        localStorage.setItem("firebase", JSON.stringify(user));
+        document.cookie = "name=harsh";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -176,6 +176,10 @@ function SignIn() {
         const secret = credential.secret;
         const user = result.user;
         console.log(token, secret, user);
+        if (user) {
+          navigate("/");
+        }
+        document.cookie = "name=harsh";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -236,7 +240,7 @@ function SignIn() {
       <div>
         <hr />
         <div>
-          <h2>Sign Up with Email Id</h2>
+          <h2>Sign Up with Email</h2>
           <p>Enter Email</p>
           <input
             type="email"
@@ -256,7 +260,6 @@ function SignIn() {
         </div>
         <button onClick={signUpWithEmailPassword}>Sign Up</button>
       </div>
-      <hr />
       <div>
         <div>
           <h2>Sign In with Email</h2>

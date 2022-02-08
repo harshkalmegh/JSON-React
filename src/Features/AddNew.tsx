@@ -6,9 +6,18 @@ function Addnew() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const local: any = localStorage.getItem("firebase");
-    const ans = JSON.parse(local);
-    if (!ans) {
+    const cookie: any = document.cookie
+      .split(";")
+      .map((cookie) => cookie.split("="))
+      .reduce(
+        (accumulator, [key, value]) => ({
+          ...accumulator,
+          [key.trim()]: decodeURIComponent(value),
+        }),
+        {}
+      );
+
+    if (!cookie.name) {
       navigate("/signin");
     }
   });

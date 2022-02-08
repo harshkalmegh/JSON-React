@@ -19,10 +19,18 @@ function Json_React() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const local: any = localStorage.getItem("firebase");
-    const ans = JSON.parse(local);
+    const cookie: any = document.cookie
+      .split(";")
+      .map((cookie) => cookie.split("="))
+      .reduce(
+        (accumulator, [key, value]) => ({
+          ...accumulator,
+          [key.trim()]: decodeURIComponent(value),
+        }),
+        {}
+      );
 
-    if (!ans) {
+    if (!cookie.name) {
       navigate("/signin");
     }
   });
@@ -71,7 +79,7 @@ function Json_React() {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        localStorage.removeItem("firebase");
+        document.cookie = "name=harsh; max-age = -60";
         navigate("/signin");
       })
       .catch((error) => {
