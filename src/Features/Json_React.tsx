@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GetRequest } from "../Utilities/Network";
 import { getAuth, signOut } from "firebase/auth";
+import data from "../Context";
 
 function Json_React() {
   /**
@@ -17,6 +18,7 @@ function Json_React() {
   const [result, setResult] = useState<any>([]);
   const [page, setPage] = useState<any>(10);
   const navigate = useNavigate();
+  const newContextData = useContext(data);
 
   useEffect(() => {
     const cookie: any = document.cookie
@@ -38,6 +40,7 @@ function Json_React() {
     const fetchData = async () => {
       const newData: any = localStorage.getItem("data");
       const parsedNewData = JSON.parse(newData);
+
       if (!parsedNewData || parsedNewData.length === 0) {
         const response = await GetRequest(
           "https://jsonplaceholder.typicode.com/todos"
@@ -51,7 +54,7 @@ function Json_React() {
   }, []);
 
   useEffect(() => {
-    const data: any = localStorage.getItem("data");
+    const data: any = localStorage.getItem(newContextData);
     const parsedData = JSON.parse(data);
     const output = parsedData.map((val: any) => val.title);
     const newOutput = output.filter(
@@ -67,7 +70,7 @@ function Json_React() {
     setPage(_value);
   };
 
-  let newdata: any = localStorage.getItem("data");
+  let newdata: any = localStorage.getItem(newContextData);
   const parsedData = JSON.parse(newdata);
 
   // const emptyArr: any = [];
@@ -130,6 +133,8 @@ function Json_React() {
               </div>
             );
           })
+        : !parsedData
+        ? []
         : parsedData.map((val: any, key: any) => {
             return (
               <div key={key} style={{ fontSize: "larger", margin: "8px" }}>
@@ -140,7 +145,10 @@ function Json_React() {
                 <button
                   onClick={() => {
                     parsedData.splice(key, 1);
-                    localStorage.setItem("data", JSON.stringify(parsedData));
+                    localStorage.setItem(
+                      newContextData,
+                      JSON.stringify(parsedData)
+                    );
                     navigate("/");
                   }}
                 >

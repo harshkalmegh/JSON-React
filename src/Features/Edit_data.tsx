@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import data from "../Context";
 
 function Edit_data() {
   const [value, setValue] = useState("");
   const params: any = useParams();
   const navigate = useNavigate();
+  const newContextData = useContext(data);
 
   useEffect(() => {
     const cookie: any = document.cookie
@@ -25,7 +27,7 @@ function Edit_data() {
 
   useEffect(() => {
     function setData() {
-      const data: any = localStorage.getItem("data");
+      const data: any = localStorage.getItem(newContextData);
       const parsedData = JSON.parse(data);
       const title = parsedData[params.key].title;
       setValue(title);
@@ -34,11 +36,11 @@ function Edit_data() {
   }, []);
 
   const _handleSubmit = () => {
-    const data: any = localStorage.getItem("data");
+    const data: any = localStorage.getItem(newContextData);
     const parsedData = JSON.parse(data);
     const _data = [...parsedData];
     _data[params.key].title = value;
-    localStorage.setItem("data", JSON.stringify(_data));
+    localStorage.setItem(newContextData, JSON.stringify(_data));
     navigate("/");
   };
 

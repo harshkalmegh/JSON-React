@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import data from "../Context";
 
 function Addnew() {
   const [value, setValue] = useState("");
   const navigate = useNavigate();
+  const newContextData = useContext(data);
 
   useEffect(() => {
     const cookie: any = document.cookie
@@ -23,11 +25,11 @@ function Addnew() {
   });
 
   const _handleAddNew = () => {
-    const data: any = localStorage.getItem("data");
+    const data: any = localStorage.getItem(newContextData);
     const parsedData = JSON.parse(data);
     // console.log(parsedData);
     parsedData.unshift({ title: value });
-    localStorage.setItem("data", JSON.stringify(parsedData));
+    localStorage.setItem(newContextData, JSON.stringify(parsedData));
     navigate("/");
   };
 

@@ -14,18 +14,20 @@ import {
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import data from "../Context";
 import { authentication } from "../Firebase/Firebase";
 
 function SignIn() {
-  const navigate = useNavigate();
   const countryCode = "+91";
-  const [phoneNumber, setPhoneNumber] = useState(countryCode);
+  const navigate = useNavigate();
   const [otp, setOtp] = useState("");
-  const [check, setCheck] = useState(true);
   const [email, setEmail] = useState("");
+  const [check, setCheck] = useState(true);
   const [password, setPassword] = useState("");
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(countryCode);
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
 
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
@@ -35,7 +37,7 @@ function SignIn() {
         if (re) {
           navigate("/");
         }
-        document.cookie = "name=harsh";
+        document.cookie = "name=harsh; max-age = 86400";
       })
       .catch((err: any) => {
         console.log(err);
@@ -89,7 +91,26 @@ function SignIn() {
           if (user) {
             navigate("/");
           }
-          document.cookie = "name=harsh";
+          <data.Consumer>
+            {({ contextData, setcontextData }) => (
+              <button onClick={() => setcontextData(user.phoneNumber)}>
+                {contextData})
+              </button>
+            )}
+          </data.Consumer>;
+          // setNewPhoneNumber(user.phoneNumber);
+
+          const newData: any = localStorage.getItem(user.phoneNumber);
+          const parsedNewData = JSON.parse(newData);
+          if (!parsedNewData) {
+            localStorage.setItem(user.phoneNumber, JSON.stringify([]));
+          } else {
+            localStorage.setItem(
+              user.phoneNumber,
+              JSON.stringify(parsedNewData)
+            );
+          }
+          document.cookie = "name=harsh; max-age = 86400";
 
           // ...
         })
@@ -140,7 +161,7 @@ function SignIn() {
         if (user) {
           navigate("/");
         }
-        document.cookie = "name=harsh";
+        document.cookie = "name=harsh; max-age = 86400";
         // ...
       })
       .catch((error) => {
@@ -156,7 +177,7 @@ function SignIn() {
         if (user) {
           navigate("/");
         }
-        document.cookie = "name=harsh";
+        document.cookie = "name=harsh; max-age = 86400";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -179,7 +200,7 @@ function SignIn() {
         if (user) {
           navigate("/");
         }
-        document.cookie = "name=harsh";
+        document.cookie = "name=harsh; max-age = 86400";
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -195,12 +216,10 @@ function SignIn() {
       <h2>Sign In with Google</h2>
       <button onClick={signInWithGoogle}>Google Sign In</button>
       <hr />
-
       <div>
         <h2>Sign In with Twitter</h2>
         <button onClick={signInWithtwitter}>Twitter</button>
       </div>
-
       <hr />
       <div>
         <h2>Sign In with Phone Number</h2>
@@ -237,6 +256,7 @@ function SignIn() {
           OTP Sign In
         </button>
       )}
+
       <div>
         <hr />
         <div>
